@@ -1,0 +1,35 @@
+#$schema: ../../main/resources/schema.yaml
+title: Test
+author: Someone
+email: test@example.com
+id: test
+license: "Lizenz: dl-de-by-2.0 - Datenlizenz Deutschland Namensnennung 2.0 - https://www.govdata.de/dl-de/by-2-0 - Quellenvermerk: ©GeoBasis-DE / LVermGeoRP<Jahr des Datenbezugs>, dl-de/by-2-0, http://www.lvermgeo.rlp.de [Daten bearbeitet]"
+location: http://localhost/
+identifierNamespace: https://registry.gdi-de.org/id/de.bfs/
+metadata: http://www.metadata.de/service
+bbox:
+  minx: 7
+  miny: 40
+  maxx: 14
+  maxy: 55
+entries:
+  - id: datatest
+    title: Test
+    summary: abstract
+    format: application/gml+xml;version=3.2
+    metadata: http://www.metadata.de/datatest
+    files:
+      - filename: file1.gml
+        crs: EPSG:4326
+      - filename: file2.gml
+        crs: EPSG:25832
+  - id: datatest2
+    title: Test 2
+    summary: abstract 2
+    format: application/gml+xml;version=3.2
+    metadata: http://www.metadata.de/datatest2
+    files:
+      - filename: file3.gml
+        crs: EPSG:4326
+      - filename: file4.gml
+        crs: EPSG:25832

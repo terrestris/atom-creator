@@ -1,0 +1,34 @@
+--- !<object>
+id: "urn:jsonschema:de:terrestris:inspire:atom:Config"
+properties:
+  location: !<string> {}
+  entries: !<array>
+    items: !<object>
+      id: "urn:jsonschema:de:terrestris:inspire:atom:Entry"
+      properties:
+        files: !<array>
+          items: !<object>
+            id: "urn:jsonschema:de:terrestris:inspire:atom:File"
+            properties:
+              filename: !<string> {}
+              crs: !<string> {}
+        title: !<string> {}
+        url: !<string> {}
+        id: !<string> {}
+        summary: !<string> {}
+        format: !<string> {}
+        metadata: !<string> {}
+  id: !<string> {}
+  title: !<string> {}
+  author: !<string> {}
+  email: !<string> {}
+  license: !<string> {}
+  identifierNamespace: !<string> {}
+  bbox: !<object>
+    id: "urn:jsonschema:de:terrestris:inspire:atom:BoundingBox"
+    properties:
+      minx: !<number> {}
+      miny: !<number> {}
+      maxx: !<number> {}
+      maxy: !<number> {}
+  metadata: !<string> {}
