@@ -101,19 +101,43 @@ public class AtomCreator implements Callable<Boolean> {
       writeSimpleElement(writer, ATOM, "name", config.getAuthor());
       writeSimpleElement(writer, ATOM, "email", config.getEmail());
       writer.writeEndElement(); // author
-      for (var file : entry.getFiles()) {
-        var current = CRS.decode(file.getCrs());
-        var code = current.getIdentifiers().iterator().next().getCode();
-        writer.writeStartElement(ATOM, "entry");
-        writeSimpleElement(writer, ATOM, "title", entry.getTitle() + " in CRS " + file.getCrs());
-        writeLink(writer, config.getLocation() + file.getFilename(), "alternate", entry.getFormat(), entry.getTitle());
-        writeSimpleElement(writer, ATOM, "id", config.getLocation() + file.getFilename());
-        writeSimpleElement(writer, ATOM, "updated", Instant.now().toString());
-        writer.writeStartElement(ATOM, "category");
-        writer.writeAttribute("term", "http://www.opengis.net/def/crs/EPSG/" + code);
-        writer.writeAttribute("label", current.getName().getCode());
-        writer.writeEndElement(); // category
-        writer.writeEndElement(); // entry
+      if (entry.getFiles() != null) {
+        for (var file : entry.getFiles()) {
+          var current = CRS.decode(file.getCrs());
+          var code = current.getIdentifiers().iterator().next().getCode();
+          writer.writeStartElement(ATOM, "entry");
+          writeSimpleElement(writer, ATOM, "title", entry.getTitle() + " in CRS " + file.getCrs());
+          writeLink(writer, config.getLocation() + file.getFilename(), "alternate", entry.getFormat(), entry.getTitle());
+          writeSimpleElement(writer, ATOM, "id", config.getLocation() + file.getFilename());
+          writeSimpleElement(writer, ATOM, "updated", Instant.now().toString());
+          writer.writeStartElement(ATOM, "category");
+          writer.writeAttribute("term", "http://www.opengis.net/def/crs/EPSG/" + code);
+          writer.writeAttribute("label", current.getName().getCode());
+          writer.writeEndElement(); // category
+          writer.writeEndElement(); // entry
+        }
+      }
+      var cfg = entry.getWfsConfig();
+      if (cfg != null) {
+        var wfsFetcher = new WfsFetcher(cfg.getUrl(), cfg.getFeatureType());
+        for (var crs : cfg.getCrs()) {
+          for (var format : cfg.getFormats()) {
+            wfsFetcher.createFile(crs, format, cfg.getFeatureType() + "_" + format + "_" + crs);
+            var current = CRS.decode(crs);
+            var code = current.getIdentifiers().iterator().next().getCode();
+            writer.writeStartElement(ATOM, "entry");
+            writeSimpleElement(writer, ATOM, "title", entry.getTitle() + " in CRS " + crs);
+            writeLink(writer, config.getLocation() + cfg.getFeatureType() + "_" + format + "_" + crs, "alternate", entry.getFormat(), entry.getTitle());
+            writeSimpleElement(writer, ATOM, "id", config.getLocation() + cfg.getFeatureType() + "_" + format + "_" + crs);
+            writeSimpleElement(writer, ATOM, "updated", Instant.now().toString());
+            writer.writeStartElement(ATOM, "category");
+            writer.writeAttribute("term", "http://www.opengis.net/def/crs/EPSG/" + code);
+            writer.writeAttribute("label", current.getName().getCode());
+            writer.writeEndElement(); // category
+            writer.writeEndElement(); // entry
+
+          }
+        }
       }
       writer.writeEndElement(); // feed
     }
@@ -146,14 +170,17 @@ public class AtomCreator implements Callable<Boolean> {
         bbox.getMinx()
       );
       writeSimpleElement(writer, GEORSS, "polygon", polygon);
-      for (var file : entry.getFiles()) {
-        var current = CRS.decode(file.getCrs());
-        var code = current.getIdentifiers().iterator().next().getCode();
-        writer.writeStartElement(ATOM, "category");
-        writer.writeAttribute("term", "http://www.opengis.net/def/crs/EPSG/" + code);
-        writer.writeAttribute("label", current.getName().getCode());
-        writer.writeEndElement(); // category
+      if (entry.getFiles() != null) {
+        for (var file : entry.getFiles()) {
+          var current = CRS.decode(file.getCrs());
+          var code = current.getIdentifiers().iterator().next().getCode();
+          writer.writeStartElement(ATOM, "category");
+          writer.writeAttribute("term", "http://www.opengis.net/def/crs/EPSG/" + code);
+          writer.writeAttribute("label", current.getName().getCode());
+          writer.writeEndElement(); // category
+        }
       }
+      // TODO WFS
       writer.writeEndElement(); // entry
       writeDatasetFeed(entry, config);
     } catch (XMLStreamException | FactoryException | IOException e) {

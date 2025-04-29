@@ -9,9 +9,9 @@ public class Entry {
 
   private List<File> files;
 
-  private String title;
+  private WfsConfig wfsConfig;
 
-  private String url;
+  private String title;
 
   private String id;
 

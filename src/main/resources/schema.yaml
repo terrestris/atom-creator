@@ -12,8 +12,16 @@ properties:
             properties:
               filename: !<string> {}
               crs: !<string> {}
+        wfsConfig: !<object>
+          id: "urn:jsonschema:de:terrestris:inspire:atom:WfsConfig"
+          properties:
+            url: !<string> {}
+            crs: !<array>
+              items: !<string> {}
+            formats: !<array>
+              items: !<string> {}
+            featureType: !<string> {}
         title: !<string> {}
-        url: !<string> {}
         id: !<string> {}
         summary: !<string> {}
         format: !<string> {}

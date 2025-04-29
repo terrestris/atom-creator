@@ -33,3 +33,15 @@ entries:
         crs: EPSG:4326
       - filename: file4.gml
         crs: EPSG:25832
+#  - id: wfstest
+#    title: WFS
+#    summary: WFS
+#    metadata: http://www.metadata.de/wfs
+#    wfsConfig:
+#      crs:
+#        - EPSG:4326
+#        - EPSG:25832
+#      formats:
+#        - application/gml+xml;version=3.2
+#      url: https://www.imis.bfs.de/ogc/opendata/ows
+#      featureType: opendata:odl_brutto_1h
