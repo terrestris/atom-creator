@@ -45,6 +45,7 @@ public class AtomFeedWriter {
     writer.writeStartElement(ATOM, "author");
     writeSimpleElement(writer, ATOM, "name", config.getAuthor());
     writeSimpleElement(writer, ATOM, "email", config.getEmail());
+    writer.writeEndElement(); // author
   }
 
   public static void writeEndElement(XMLStreamWriter writer) throws XMLStreamException {

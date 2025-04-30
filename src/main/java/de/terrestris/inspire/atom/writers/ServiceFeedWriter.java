@@ -21,8 +21,6 @@ public class ServiceFeedWriter {
     var metadataLink = config.getMetadata();
     var selfLink = config.getLocation() + config.getId() + ".xml";
     AtomFeedWriter.writeMetadata(writer, config, metadataLink, selfLink);
-    LinkWriter.writeLink(writer, config.getLocation() + config.getId() + ".xml", "self", "application/atom+xml", "Selbstreferenz");
-    LinkWriter.writeLink(writer, config.getMetadata(), "describedby", "application/xml", "Metadaten");
 
     writer.writeEmptyElement(AtomFeedWriter.ATOM, "category");
     writer.writeAttribute("term", "http://inspire.ec.europa.eu/metadata-codelist/SpatialDataServiceCategory/infoFeatureAccessService");
