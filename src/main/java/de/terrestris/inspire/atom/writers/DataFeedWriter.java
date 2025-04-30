@@ -1,10 +1,10 @@
 package de.terrestris.inspire.atom.writers;
 
-import de.terrestris.inspire.atom.*;
 import de.terrestris.inspire.atom.config.Config;
+import de.terrestris.inspire.atom.config.WfsConfig;
 import de.terrestris.inspire.atom.config.Entry;
 import de.terrestris.inspire.atom.config.File;
-import de.terrestris.inspire.atom.config.WfsConfig;
+import de.terrestris.inspire.atom.WfsFetcher;
 import org.geotools.api.referencing.FactoryException;
 import org.geotools.referencing.CRS;
 
@@ -52,7 +52,7 @@ public class DataFeedWriter {
     var code = current.getIdentifiers().iterator().next().getCode();
     writer.writeStartElement(AtomFeedWriter.ATOM, "entry");
     writeSimpleElement(writer, AtomFeedWriter.ATOM, "title", entry.getTitle() + " in CRS " + crs);
-    LinkWriter.writeLink(writer, config.getLocation() + cfg.getFeatureType() + "_" + format + "_" + crs, "alternate", entry.getFormat(), entry.getTitle());
+    LinkWriter.writeLink(writer, config.getLocation() + cfg.getFeatureType() + "_" + format + "_" + crs, "alternate", format, entry.getTitle());
     writeSimpleElement(writer, AtomFeedWriter.ATOM, "id", config.getLocation() + cfg.getFeatureType() + "_" + format + "_" + crs);
     writeSimpleElement(writer, AtomFeedWriter.ATOM, "updated", Instant.now().toString());
     writer.writeEmptyElement(AtomFeedWriter.ATOM, "category");
@@ -65,8 +65,8 @@ public class DataFeedWriter {
     var current = CRS.decode(file.getCrs());
     var code = current.getIdentifiers().iterator().next().getCode();
     writer.writeStartElement(AtomFeedWriter.ATOM, "entry");
-    writeSimpleElement(writer, AtomFeedWriter.ATOM, "title", entry.getTitle() + " in CRS " + file.getCrs());
-    LinkWriter.writeLink(writer, file.getFilename(), "alternate", entry.getFormat(), entry.getTitle());
+    writeSimpleElement(writer, AtomFeedWriter.ATOM, "title", entry.getTitle() + " as " + file.getType() + " in CRS " + file.getCrs());
+    LinkWriter.writeLink(writer, file.getFilename(), "alternate", file.getMimeType(), entry.getTitle());
     writeSimpleElement(writer, AtomFeedWriter.ATOM, "id", file.getFilename());
     writeSimpleElement(writer, AtomFeedWriter.ATOM, "updated", Instant.now().toString());
     writer.writeEmptyElement(AtomFeedWriter.ATOM, "category");

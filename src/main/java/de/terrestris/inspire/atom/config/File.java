@@ -9,4 +9,7 @@ public class File {
 
   private String crs;
 
+  private String type;
+
+  private String mimeType;
 }
