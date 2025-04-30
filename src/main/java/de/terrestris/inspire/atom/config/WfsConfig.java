@@ -11,7 +11,7 @@ public class WfsConfig {
 
   private List<String> crs;
 
-  private List<String> formats;
+  private List<WfsFormat> formats;
 
   private String featureType;
 
