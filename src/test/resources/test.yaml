@@ -4,7 +4,7 @@ author: Someone
 email: test@example.com
 id: test
 license: "Lizenz: dl-de-by-2.0 - Datenlizenz Deutschland Namensnennung 2.0 - https://www.govdata.de/dl-de/by-2-0 - Quellenvermerk: ©GeoBasis-DE / LVermGeoRP<Jahr des Datenbezugs>, dl-de/by-2-0, http://www.lvermgeo.rlp.de [Daten bearbeitet]"
-location: http://localhost/
+location: http://localhost:8080/feed/
 identifierNamespace: https://registry.gdi-de.org/id/de.bfs/
 metadata: http://www.metadata.de/service
 bbox:
@@ -19,9 +19,9 @@ entries:
     format: application/gml+xml;version=3.2
     metadata: http://www.metadata.de/datatest
     files:
-      - filename: file1.gml
+      - filename: http://localhost:8080/files/file1.gml
         crs: EPSG:4326
-      - filename: file2.gml
+      - filename: http://localhost:8080/files/file2.gml
         crs: EPSG:25832
   - id: datatest2
     title: Test 2
@@ -29,9 +29,9 @@ entries:
     format: application/gml+xml;version=3.2
     metadata: http://www.metadata.de/datatest2
     files:
-      - filename: file3.gml
+      - filename: http://localhost:8080/files/file3.gml
         crs: EPSG:4326
-      - filename: file4.gml
+      - filename: http://localhost:8080/files/file4.gml
         crs: EPSG:25832
 #  - id: wfstest
 #    title: WFS
