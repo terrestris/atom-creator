@@ -17,7 +17,7 @@ public class AtomFeedWriter {
 
   public static void writePrefix(XMLStreamWriter writer) throws XMLStreamException {
     writer.setDefaultNamespace(ATOM);
-    writer.setPrefix("dls", DLS);
+    writer.setPrefix("inspire_dls", DLS);
     writer.setPrefix("georss", GEORSS);
     writer.writeStartDocument();
   }
@@ -25,7 +25,7 @@ public class AtomFeedWriter {
   public static void writeStartElement(XMLStreamWriter writer) throws XMLStreamException {
     writer.writeStartElement(ATOM, "feed");
     writer.writeDefaultNamespace(ATOM);
-    writer.writeNamespace("dls", DLS);
+    writer.writeNamespace("inspire_dls", DLS);
     writer.writeNamespace("georss", GEORSS);
   }
 
@@ -49,6 +49,6 @@ public class AtomFeedWriter {
   }
 
   public static void writeEndElement(XMLStreamWriter writer) throws XMLStreamException {
-    writer.writeEndElement();
+    writer.writeEndElement(); // feed
   }
 }

@@ -16,23 +16,30 @@ entries:
   - id: datatest
     title: Test
     summary: abstract
-    format: application/gml+xml;version=3.2
     metadata: http://www.metadata.de/datatest
     files:
-      - filename: http://localhost:8080/files/file1.gml
+      - type: Shapefile
+        mimeType: application/zip
+        filename: http://localhost:8080/files/file1.zip
+        crs: EPSG:4326
+      - type: GML
+        mimeType: application/gml+xml;version=3.2
+        filename: http://localhost:8080/files/file1.gml
         crs: EPSG:4326
       - filename: http://localhost:8080/files/file2.gml
         crs: EPSG:25832
+        mimeType: application/gml+xml;version=3.2
   - id: datatest2
     title: Test 2
     summary: abstract 2
-    format: application/gml+xml;version=3.2
     metadata: http://www.metadata.de/datatest2
     files:
       - filename: http://localhost:8080/files/file3.gml
         crs: EPSG:4326
+        mimeType: application/gml+xml;version=3.2
       - filename: http://localhost:8080/files/file4.gml
         crs: EPSG:25832
+        mimeType: application/gml+xml;version=3.2
 #  - id: wfstest
 #    title: WFS
 #    summary: WFS

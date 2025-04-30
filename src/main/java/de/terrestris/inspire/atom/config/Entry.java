@@ -17,8 +17,6 @@ public class Entry {
 
   private String summary;
 
-  private String format;
-
   private String metadata;
 
 }
