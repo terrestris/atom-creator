@@ -26,7 +26,8 @@ entries:
         mimeType: application/gml+xml;version=3.2
         filename: http://localhost:8080/files/file1.gml
         crs: EPSG:4326
-      - filename: http://localhost:8080/files/file2.gml
+      - type: GML
+        filename: http://localhost:8080/files/file2.gml
         crs: EPSG:25832
         mimeType: application/gml+xml;version=3.2
   - id: datatest2
@@ -34,21 +35,28 @@ entries:
     summary: abstract 2
     metadata: http://www.metadata.de/datatest2
     files:
-      - filename: http://localhost:8080/files/file3.gml
+      - type: GML
+        filename: http://localhost:8080/files/file3.gml
         crs: EPSG:4326
         mimeType: application/gml+xml;version=3.2
-      - filename: http://localhost:8080/files/file4.gml
+      - type: GML
+        filename: http://localhost:8080/files/file4.gml
         crs: EPSG:25832
         mimeType: application/gml+xml;version=3.2
-#  - id: wfstest
-#    title: WFS
-#    summary: WFS
-#    metadata: http://www.metadata.de/wfs
-#    wfsConfig:
-#      crs:
-#        - EPSG:4326
-#        - EPSG:25832
-#      formats:
-#        - application/gml+xml;version=3.2
-#      url: https://www.imis.bfs.de/ogc/opendata/ows
-#      featureType: opendata:odl_brutto_1h
+  - id: wfstest
+    title: WFS
+    summary: WFS
+    metadata: http://www.metadata.de/wfs
+    wfsConfig:
+      crs:
+        - EPSG:4326
+        - EPSG:25832
+      formats:
+#        - type: GML
+#          format: application%2Fgml%2Bxml%3B%20version%3D3.2
+#          mimeType: application/gml+xml; version=3.2
+        - type: Shapefile
+          format: SHAPE-ZIP
+          mimeType: application/zip
+      url: https://bfs-koala.intranet.terrestris.de:1443/geoserver/ows
+      featureType: opendata:odl_brutto_1h
