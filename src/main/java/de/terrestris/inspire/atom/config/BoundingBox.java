@@ -1,4 +1,4 @@
-package de.terrestris.inspire.atom;
+package de.terrestris.inspire.atom.config;
 
 import lombok.Data;
 
