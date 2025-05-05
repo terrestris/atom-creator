@@ -4,19 +4,18 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./docker/feeds:/usr/share/nginx/html/feeds/
-      - ./docker/cache:/usr/share/nginx/html/cache/
-      - ./docker/files:/usr/share/nginx/html/files/
+      - ./docker/data:/usr/share/nginx/html/
 
   atom-creator:
     container_name: atom-creator
     build:
       context: .
     image: atom-creator
+    environment:
+      PUBLIC_URL: http://localhost:8080
     volumes:
       - ./docker/test.yaml:/config.yaml
-      - ./docker/cache:/cache
-      - ./docker/feeds:/feeds
+      - ./docker/data:/data
 
   ofelia:
     image: mcuadros/ofelia:latest

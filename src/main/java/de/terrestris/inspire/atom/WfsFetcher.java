@@ -1,40 +1,22 @@
 package de.terrestris.inspire.atom;
 
-import org.codehaus.stax2.XMLInputFactory2;
-import org.codehaus.stax2.XMLOutputFactory2;
-import org.codehaus.stax2.XMLStreamReader2;
-import org.codehaus.stax2.XMLStreamWriter2;
+import de.terrestris.inspire.atom.config.Config;
+import de.terrestris.inspire.atom.config.Entry;
+import de.terrestris.inspire.atom.config.WfsConfig;
+import de.terrestris.inspire.atom.config.WfsFormat;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
+import java.nio.channels.Channels;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class WfsFetcher {
-
-  private static final XMLOutputFactory OUTFACTORY = XMLOutputFactory2.newDefaultFactory();
-
-  private static final XMLInputFactory INFACTORY = XMLInputFactory2.newDefaultFactory();
-
-  private static final String WFS = "http://www.opengis.net/wfs/2.0";
-
-  private static final String GML = "http://www.opengis.net/gml/3.2";
-
-  private final String url;
-
-  private final String featureType;
-
-  public WfsFetcher(String url, String featureType) {
-    this.url = url;
-    this.featureType = featureType;
-  }
-
-  public void createFile(String crs, String format, String file) throws IOException, XMLStreamException {
-    var u = new URL(url);
+  private static URI createWfsUrl(WfsConfig wfsConfig, WfsFormat format, String crs) throws MalformedURLException {
+    var u = new URL(wfsConfig.getUrl());
     var builder = new DefaultUriBuilderFactory().builder()
       .scheme(u.getProtocol())
       .host(u.getHost())
@@ -43,19 +25,36 @@ public class WfsFetcher {
       .queryParam("service", "WFS")
       .queryParam("request", "GetFeature")
       .queryParam("version", "2.0.0")
-      .queryParam("typenames", featureType)
-      .queryParam("maxFeatures", "50")
-      .queryParam("outputformat", format)
-      .queryParam("srsname", crs)
-      .queryParam("startindex", "1");
-    var in = builder.build().toURL().openStream();
-    var reader = (XMLStreamReader2) INFACTORY.createXMLStreamReader(in);
-    var writer = (XMLStreamWriter2) OUTFACTORY.createXMLStreamWriter(Files.newOutputStream(Path.of(file)));
-    while (!(reader.isStartElement() && reader.getLocalName().equals("member"))) {
-      writer.copyEventFromReader(reader, false);
-      reader.next();
-    }
-    writer.flush();
+      .queryParam("typeName", wfsConfig.getFeatureType())
+      .queryParam("outputFormat", format.getFormat())
+      .queryParam("srsname", crs);
+    return builder.build();
   }
 
+  public static void cacheFiles(Config config, DataPathsAndUrls paths) throws IOException {
+    for (var entry : config.getEntries()) {
+      var wfsConfig = entry.getWfsConfig();
+      if (wfsConfig != null) {
+        var entryCacheDirPath = paths.getCacheDirPath(entry);
+        Files.createDirectories(entryCacheDirPath);
+        System.out.println("Directory created successfully.");
+
+        for (var crs : wfsConfig.getCrs()) {
+          for (var format : wfsConfig.getFormats()) {
+            cacheFile(entry, wfsConfig, paths, format, crs);
+          }
+        }
+      }
+    }
+  }
+
+  public static void cacheFile(Entry entry, WfsConfig wfsConfig, DataPathsAndUrls paths, WfsFormat format, String crs) throws IOException {
+    var u = createWfsUrl(wfsConfig, format, crs);
+    var inputChannel = Channels.newChannel(u.toURL().openStream());
+    var outputStream = new FileOutputStream(paths.getCacheFilePath(entry, format, crs).toString());
+    outputStream.getChannel().transferFrom(inputChannel, 0, Long.MAX_VALUE);
+    outputStream.close();
+    inputChannel.close();
+    System.out.println("File cached.");
+  }
 }

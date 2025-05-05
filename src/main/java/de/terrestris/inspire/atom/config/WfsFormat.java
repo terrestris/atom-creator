@@ -11,4 +11,5 @@ public class WfsFormat {
 
   private String mimeType;
 
+  private String fileExtension;
 }

@@ -39,7 +39,7 @@ public class AtomFeedWriter {
       LinkWriter.writeLink(writer, upLink, "up", "application/atom+xml", "Elternreferenz");
     }
     LinkWriter.writeLink(writer, describedbyLink, "describedby", "application/xml", "Metadaten");
-    writeSimpleElement(writer, ATOM, "id", config.getLocation() + config.getId() + ".xml");
+    writeSimpleElement(writer, ATOM, "id", config.getId());
     writeSimpleElement(writer, ATOM, "rights", config.getLicense());
     writeSimpleElement(writer, ATOM, "updated", Instant.now().toString());
     writer.writeStartElement(ATOM, "author");

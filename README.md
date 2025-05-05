@@ -11,7 +11,13 @@ This will run the atom-creator once and start a webserver to serve the feeds. Ad
 a scheduler is built in to run the atom-creator once every night.
 
 If you want to run the atom-creator in your IDE, create an IntelliJ run configuration for the
-`AtomCreator` class with cli arguments `--clean -f docker/test.yaml docker/feeds`.
+`AtomCreator` class with cli arguments `--clean -f docker/test.yaml docker/data http://localhost:8080`.
+
+If you want to rerun the application inside docker you can use:
+
+```bash
+mvn clean package && docker compose run --build --remove-orphans atom-creator
+```
 
 Test Application
 ----------------

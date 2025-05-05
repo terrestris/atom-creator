@@ -4,7 +4,6 @@ author: Someone
 email: test@example.com
 id: test
 license: "Lizenz: dl-de-by-2.0 - Datenlizenz Deutschland Namensnennung 2.0 - https://www.govdata.de/dl-de/by-2-0 - Quellenvermerk: ©GeoBasis-DE / LVermGeoRP<Jahr des Datenbezugs>, dl-de/by-2-0, http://www.lvermgeo.rlp.de [Daten bearbeitet]"
-location: http://localhost:8080/feed/
 identifierNamespace: https://registry.gdi-de.org/id/de.bfs/
 metadata: http://www.metadata.de/service
 bbox:
@@ -44,7 +43,7 @@ entries:
         crs: EPSG:25832
         mimeType: application/gml+xml;version=3.2
   - id: wfstest
-    title: WFS
+    title: ODL Brutto 1h (WFS)
     summary: WFS
     metadata: http://www.metadata.de/wfs
     wfsConfig:
@@ -58,5 +57,6 @@ entries:
         - typeTitle: Shapefile
           format: SHAPE-ZIP
           mimeType: application/zip
+          fileExtension: zip
       url: https://bfs-koala.intranet.terrestris.de:1443/geoserver/ows
       featureType: opendata:odl_brutto_1h

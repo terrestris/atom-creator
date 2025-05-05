@@ -1,4 +1,4 @@
 target
 .idea
-/docker/cache/
-/docker/feeds/
+/docker/data/cache/
+/docker/data/feeds/

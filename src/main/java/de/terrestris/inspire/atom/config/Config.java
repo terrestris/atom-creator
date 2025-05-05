@@ -7,8 +7,6 @@ import java.util.List;
 @Data
 public class Config {
 
-  private String location;
-
   private List<Entry> entries;
 
   private String id;
