@@ -14,8 +14,8 @@ import picocli.CommandLine;
 import javax.xml.stream.XMLOutputFactory;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "ATOM creator", version = "0.0.1", mixinStandardHelpOptions = true)
@@ -45,6 +45,12 @@ public class AtomCreator implements Callable<Boolean> {
   )
   private boolean generateSchema;
 
+  @CommandLine.Option(
+    names = {"--clean"},
+    description = "Remove any XML files in the OUTDIR before creating new feeds"
+  )
+  private boolean clean;
+
   private static void generateSchema() throws IOException {
     SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
     MAPPER.acceptJsonFormatVisitor(MAPPER.constructType(Config.class), visitor);
@@ -61,8 +67,6 @@ public class AtomCreator implements Callable<Boolean> {
 
   @Override
   public Boolean call() throws Exception {
-    System.out.println("Starting atom creation...");
-
     if (generateSchema) {
       System.out.println("Generating schema...");
       generateSchema();
@@ -70,6 +74,13 @@ public class AtomCreator implements Callable<Boolean> {
       return true;
     }
 
+    if (clean) {
+      System.out.println("Cleaning up...");
+      clean();
+      System.out.println("Finished cleaning up.");
+    }
+
+    System.out.println("Starting atom creation...");
     System.out.println("Reading config file...");
     var config = MAPPER.readValue(new File(file), Config.class);
     if (!config.getLocation().endsWith("/")) {
@@ -96,5 +107,26 @@ public class AtomCreator implements Callable<Boolean> {
 
     System.out.println("Finished atom creation.");
     return true;
+  }
+
+  private void clean() throws IOException {
+    Path dir = Paths.get(outDir);
+
+    Files.walkFileTree(dir, new SimpleFileVisitor<>() {
+      @Override
+      public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+        if (file.toString().endsWith(".xml")) {
+          Files.delete(file);
+          System.out.println("Deleted: " + file);
+        }
+        return FileVisitResult.CONTINUE;
+      }
+
+      @Override
+      public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+        // Log the error or handle it as needed
+        return FileVisitResult.CONTINUE;
+      }
+    });
   }
 }

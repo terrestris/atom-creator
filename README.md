@@ -1,19 +1,23 @@
+Running Application
+-------------------
+
+Build and run the application with the command:
+
+```bash
+mvn clean package && docker compose up
+```
+
+This will run the atom-creator once and start a webserver to serve the feeds. Additionally,
+a scheduler is built in to run the atom-creator once every night.
+
+If you want to run the atom-creator in your IDE, create an IntelliJ run configuration for the
+`AtomCreator` class with cli arguments `--clean -f docker/test.yaml docker/feeds`.
+
 Test Application
 ----------------
 
-Run program with `-f src/test/resources/test.yaml output`
+See XML-Feed by visiting http://localhost:8080/feeds/test.xml
 
-Start webserver:
-```bash
-docker compose up
-```
+Use a Feed Reader plugin in your Browser and add the feed http://localhost:8080/feeds/test.xml
 
-See XML-Feed by visiting http://localhost:8080/feed/test.xml
-
-Use a Feed Reader plugin in your Browser and add the feed http://localhost:8080/feed/test.xml
-
-Test the Feed by using the INSPIRE Atom Client Plugin in QGIS by providing the URL http://localhost:8080/feed/test.xml
-
-```bash
-mvn clean package && docker compose run --build --remove-orphans atom-creator
-```
+Test the Feed by using the INSPIRE Atom Client Plugin in QGIS by providing the URL http://localhost:8080/feeds/test.xml

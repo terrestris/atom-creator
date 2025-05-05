@@ -9,8 +9,7 @@ services:
       - ./docker/files:/usr/share/nginx/html/files/
 
   atom-creator:
-    profiles:
-      - atom-creator
+    container_name: atom-creator
     build:
       context: .
     image: atom-creator
@@ -18,3 +17,17 @@ services:
       - ./docker/test.yaml:/config.yaml
       - ./docker/cache:/cache
       - ./docker/feeds:/feeds
+
+  ofelia:
+    image: mcuadros/ofelia:latest
+    depends_on:
+      atom-creator:
+        condition: service_completed_successfully
+    command: daemon --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      ofelia.job-run.atom-creator.schedule: "0 0 1 * * *"
+      ofelia.job-run.atom-creator.command: "sh -c 'docker restart atom-creator'"
+      ofelia.job-run.atom-creator.image: "docker:cli"
+      ofelia.job-run.atom-creator.volume: "/var/run/docker.sock:/var/run/docker.sock"
