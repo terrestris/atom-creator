@@ -7,7 +7,7 @@ public class WfsFormat {
 
   private String format;
 
-  private String type;
+  private String typeTitle;
 
   private String mimeType;
 

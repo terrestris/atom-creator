@@ -61,27 +61,40 @@ public class AtomCreator implements Callable<Boolean> {
 
   @Override
   public Boolean call() throws Exception {
+    System.out.println("Starting atom creation...");
+
     if (generateSchema) {
+      System.out.println("Generating schema...");
       generateSchema();
+      System.out.println("Finished generating schema.");
       return true;
     }
+
+    System.out.println("Reading config file...");
     var config = MAPPER.readValue(new File(file), Config.class);
     if (!config.getLocation().endsWith("/")) {
       config.setLocation(config.getLocation() + "/");
     }
+    System.out.println("Finished reading config file.");
 
+    System.out.println("Generating service feed...");
     try (var out = Files.newOutputStream(Path.of(outDir + "/" + config.getId() + ".xml"))) {
       var writer = FACTORY.createXMLStreamWriter(out);
       ServiceFeedWriter.write(writer, config);
     }
+    System.out.println("Finished generating service feed.");
 
+    System.out.println("Generating data feeds...");
     for (var entry : config.getEntries()) {
+      System.out.println("Generating data feed " + entry.getTitle() + " ...");
       try (var out = Files.newOutputStream(Path.of(outDir + "/" + entry.getId() + ".xml"))) {
         var writer = FACTORY.createXMLStreamWriter(out);
         DataFeedWriter.write(writer, config, entry);
       }
     }
+    System.out.println("Finished generating data feeds.");
 
+    System.out.println("Finished atom creation.");
     return true;
   }
 }

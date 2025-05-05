@@ -4,5 +4,17 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./output:/usr/share/nginx/html/feed/
-      - ./src/test/resources/files:/usr/share/nginx/html/files/
+      - ./docker/feeds:/usr/share/nginx/html/feeds/
+      - ./docker/cache:/usr/share/nginx/html/cache/
+      - ./docker/files:/usr/share/nginx/html/files/
+
+  atom-creator:
+    profiles:
+      - atom-creator
+    build:
+      context: .
+    image: atom-creator
+    volumes:
+      - ./docker/test.yaml:/config.yaml
+      - ./docker/cache:/cache
+      - ./docker/feeds:/feeds

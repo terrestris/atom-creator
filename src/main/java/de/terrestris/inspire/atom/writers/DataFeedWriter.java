@@ -46,14 +46,14 @@ public class DataFeedWriter {
   }
 
   private static void writeWfsEntry(XMLStreamWriter writer, Config config, Entry entry, String crs, WfsFormat format, WfsConfig wfsConfig) throws IOException, XMLStreamException, FactoryException {
-//    wfsFetcher.createFile(crs, format.getFormat(), cfg.getFeatureType() + "_" + format.getType() + "_" + crs);
+//    wfsFetcher.createFile(crs, format.getFormat(), cfg.getFeatureType() + "_" + format.getTypeTitle() + "_" + crs);
     var url = createWfsUrl(wfsConfig, wfsConfig.getFeatureType(), format.getFormat(), crs);
     var current = CRS.decode(crs);
     var code = current.getIdentifiers().iterator().next().getCode();
     writer.writeStartElement(AtomFeedWriter.ATOM, "entry");
-    writeSimpleElement(writer, AtomFeedWriter.ATOM, "title", entry.getTitle() + " as " + format.getType() + " in CRS " + crs);
+    writeSimpleElement(writer, AtomFeedWriter.ATOM, "title", entry.getTitle() + " as " + format.getTypeTitle() + " in CRS " + crs);
     LinkWriter.writeLink(writer, url, "alternate", format.getMimeType(), entry.getTitle());
-    writeSimpleElement(writer, AtomFeedWriter.ATOM, "id", config.getLocation() + wfsConfig.getFeatureType() + "_" + format.getType() + "_" + crs);
+    writeSimpleElement(writer, AtomFeedWriter.ATOM, "id", config.getLocation() + wfsConfig.getFeatureType() + "_" + format.getTypeTitle() + "_" + crs);
     writeSimpleElement(writer, AtomFeedWriter.ATOM, "updated", Instant.now().toString());
     writer.writeEmptyElement(AtomFeedWriter.ATOM, "category");
     writer.writeAttribute("term", "http://www.opengis.net/def/crs/EPSG/" + code);
@@ -81,7 +81,7 @@ public class DataFeedWriter {
     var current = CRS.decode(file.getCrs());
     var code = current.getIdentifiers().iterator().next().getCode();
     writer.writeStartElement(AtomFeedWriter.ATOM, "entry");
-    writeSimpleElement(writer, AtomFeedWriter.ATOM, "title", entry.getTitle() + " as " + file.getType() + " in CRS " + file.getCrs());
+    writeSimpleElement(writer, AtomFeedWriter.ATOM, "title", entry.getTitle() + " as " + file.getTypeTitle() + " in CRS " + file.getCrs());
     LinkWriter.writeLink(writer, file.getFilename(), "alternate", file.getMimeType(), entry.getTitle());
     writeSimpleElement(writer, AtomFeedWriter.ATOM, "id", file.getFilename());
     writeSimpleElement(writer, AtomFeedWriter.ATOM, "updated", Instant.now().toString());

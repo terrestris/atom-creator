@@ -18,28 +18,28 @@ entries:
     summary: abstract
     metadata: http://www.metadata.de/datatest
     files:
-      - type: Shapefile
+      - typeTitle: Shapefile
         mimeType: application/zip
         filename: http://localhost:8080/files/file1.zip
         crs: EPSG:4326
-      - type: GML
+      - typeTitle: GML
         mimeType: application/gml+xml;version=3.2
         filename: http://localhost:8080/files/file1.gml
         crs: EPSG:4326
-      - type: GML
+      - typeTitle: GML
+        mimeType: application/gml+xml;version=3.2
         filename: http://localhost:8080/files/file2.gml
         crs: EPSG:25832
-        mimeType: application/gml+xml;version=3.2
   - id: datatest2
     title: Test 2
     summary: abstract 2
     metadata: http://www.metadata.de/datatest2
     files:
-      - type: GML
+      - typeTitle: GML
         filename: http://localhost:8080/files/file3.gml
         crs: EPSG:4326
         mimeType: application/gml+xml;version=3.2
-      - type: GML
+      - typeTitle: GML
         filename: http://localhost:8080/files/file4.gml
         crs: EPSG:25832
         mimeType: application/gml+xml;version=3.2
@@ -55,7 +55,7 @@ entries:
 #        - type: GML
 #          format: application%2Fgml%2Bxml%3B%20version%3D3.2
 #          mimeType: application/gml+xml; version=3.2
-        - type: Shapefile
+        - typeTitle: Shapefile
           format: SHAPE-ZIP
           mimeType: application/zip
       url: https://bfs-koala.intranet.terrestris.de:1443/geoserver/ows
