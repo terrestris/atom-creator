@@ -1,6 +1,6 @@
 package de.terrestris.inspire.atom.writers;
 
-import de.terrestris.inspire.atom.config.Config;
+import de.terrestris.inspire.atom.config.Service;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -29,11 +29,11 @@ public class AtomFeedWriter {
     writer.writeNamespace("georss", GEORSS);
   }
 
-  public static void writeMetadata(XMLStreamWriter writer, Config config, String selfLink, String describedbyLink) throws XMLStreamException {
+  public static void writeMetadata(XMLStreamWriter writer, Service config, String selfLink, String describedbyLink) throws XMLStreamException {
     writeMetadata(writer, config, selfLink, describedbyLink, null);
   }
 
-  public static void writeMetadata(XMLStreamWriter writer, Config config, String selfLink, String describedbyLink, String upLink) throws XMLStreamException {
+  public static void writeMetadata(XMLStreamWriter writer, Service config, String selfLink, String describedbyLink, String upLink) throws XMLStreamException {
     LinkWriter.writeLink(writer, selfLink, "self", "application/atom+xml", "Selbstreferenz");
     if (upLink != null) {
       LinkWriter.writeLink(writer, upLink, "up", "application/atom+xml", "Elternreferenz");

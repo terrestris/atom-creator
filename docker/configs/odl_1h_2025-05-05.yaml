@@ -1,0 +1,15 @@
+id: odl_1h
+date: 2025-05-05
+files:
+  - typeTitle: Shapefile
+    mimeType: application/zip
+    filename: http://localhost:8080/files/file1.zip
+    crs: EPSG:4326
+  - typeTitle: GML
+    mimeType: application/gml+xml;version=3.2
+    filename: http://localhost:8080/files/file1.gml
+    crs: EPSG:4326
+  - typeTitle: GML
+    mimeType: application/gml+xml;version=3.2
+    filename: http://localhost:8080/files/file2.gml
+    crs: EPSG:25832

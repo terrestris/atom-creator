@@ -1,8 +1,7 @@
 FROM openjdk:17-jdk-alpine
 
-ENV CONFIG_PATH=/config.yaml
-ENV DATA_DIR=/data
-ENV PUBLIC_URL=http://localhost:8080
+ENV CONFIG_DIR=/configs
+ENV OUTPUT_DIR=/feeds
 
 COPY target/atom-creator-*.jar atom-creator.jar
-ENTRYPOINT java -jar /atom-creator.jar --clean -f $CONFIG_PATH $DATA_DIR $PUBLIC_URL
+ENTRYPOINT java -jar /atom-creator.jar --clean $CONFIG_DIR $OUTPUT_DIR

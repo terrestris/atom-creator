@@ -12,11 +12,6 @@ a scheduler is built in to run the atom-creator once every night.
 
 If you want to run the atom-creator in your IDE, create an IntelliJ run configuration for the
 `AtomCreator` class with cli arguments `--clean -f docker/test.yaml docker/data http://localhost:8080`.
-It might be necessary to delete the files in the cache directory manually beforehand:
-
-```shell
-sudo find docker/data/cache -mindepth 1 -type d -exec rm -r {} + && sudo rm docker/data/feeds/*.xml
-```
 
 If you want to rerun the application inside docker you can use:
 

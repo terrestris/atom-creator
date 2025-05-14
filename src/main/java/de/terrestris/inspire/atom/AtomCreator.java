@@ -4,20 +4,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import de.terrestris.inspire.atom.config.Config;
+import de.terrestris.inspire.atom.config.Dataset;
+import de.terrestris.inspire.atom.config.Service;
 import de.terrestris.inspire.atom.writers.DataFeedWriter;
 import de.terrestris.inspire.atom.writers.ServiceFeedWriter;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.io.FileUtils;
 import org.codehaus.stax2.XMLOutputFactory2;
 import picocli.CommandLine;
 
-import javax.validation.constraints.NotNull;
 import javax.xml.stream.XMLOutputFactory;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "ATOM creator", version = "0.0.1", mixinStandardHelpOptions = true)
@@ -30,22 +35,16 @@ public class AtomCreator implements Callable<Boolean> {
   private static final ObjectMapper MAPPER = new ObjectMapper(new YAMLFactory());
 
   @CommandLine.Parameters(
-    paramLabel = "DATA_DIR",
-    description = "Data directory. Should contain folders `cache`, `files` and `feeds`. This directory has to be exposed by a webserver."
+    paramLabel = "CONFIG_DIR",
+    description = "Config directory. Needs to contain one `service.yaml`."
   )
-  private String dataDir;
+  private String configDir;
 
   @CommandLine.Parameters(
-    paramLabel = "PUBLIC_URL",
-    description = "The public URL of the data directory"
+    paramLabel = "OUTPUT_DIR",
+    description = "Output directory.."
   )
-  private String publicUrl;
-
-  @CommandLine.Option(
-    names = {"-f", "--file"},
-    description = "Configuration files to generate the feeds for"
-  )
-  private String file;
+  private String outputDir;
 
   @CommandLine.Option(
     names = {"-s", "--schema"},
@@ -82,36 +81,33 @@ public class AtomCreator implements Callable<Boolean> {
       return true;
     }
 
-    var paths = new DataPathsAndUrls(dataDir, publicUrl);
-
     if (clean) {
       System.out.println("Cleaning up...");
-      clean(paths);
+      clean();
       System.out.println("Finished cleaning up.");
     }
 
     System.out.println("Starting atom creation...");
     System.out.println("Reading config file...");
-    var config = MAPPER.readValue(new File(file), Config.class);
+    var config = readConfig();
     System.out.println("Finished reading config file.");
 
     System.out.println("Generating service feed...");
-    try (var out = Files.newOutputStream(paths.getFeedPath(config.getId()))) {
+    try (var out = Files.newOutputStream(PathBuilder.buildPath(outputDir, config.getService().getId() + ".xml"))) {
       var writer = FACTORY.createXMLStreamWriter(out);
-      ServiceFeedWriter.write(writer, config, paths);
+      ServiceFeedWriter.write(writer, config);
     }
     System.out.println("Finished generating service feed.");
 
-    System.out.println("Caching WFS results...");
-    WfsFetcher.cacheFiles(config, paths);
-    System.out.println("Finished caching WFS results.");
-
     System.out.println("Generating data feeds...");
-    for (var entry : config.getEntries()) {
+    for (var entry : config.getService().getEntries()) {
       System.out.println("Generating data feed " + entry.getTitle() + " ...");
-      try (var out = Files.newOutputStream(paths.getFeedPath(entry.getId()))) {
+      var datasets = config.getDatasets().stream()
+        .filter(dataset -> dataset.getId().equals(entry.getId()))
+        .toList();
+      try (var out = Files.newOutputStream(PathBuilder.buildPath(outputDir, entry.getId() + ".xml"))) {
         var writer = FACTORY.createXMLStreamWriter(out);
-        DataFeedWriter.write(writer, paths, config, entry);
+        DataFeedWriter.write(writer, config.getService(), entry, datasets);
       }
     }
     System.out.println("Finished generating data feeds.");
@@ -120,29 +116,41 @@ public class AtomCreator implements Callable<Boolean> {
     return true;
   }
 
-  private void clean(DataPathsAndUrls paths) throws IOException {
-    Path feedsDirPath = paths.getFeedDirPath();
+  private Config readConfig() throws Exception {
 
-    Files.walkFileTree(feedsDirPath, new SimpleFileVisitor<>() {
+    final Service[] service = new Service[1];
+    List<Dataset> datasets = new ArrayList<>();
+
+    Files.walkFileTree(Path.of(configDir), new SimpleFileVisitor<>() {
       @Override
       public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        if (file.toString().endsWith(".xml")) {
-          Files.delete(file);
-          System.out.println("Deleted: " + file);
+        if (file.getFileName().toString().equals("service.yaml")) {
+          service[0] = MAPPER.readValue(file.toFile(), Service.class);
+        } else {
+          datasets.add(MAPPER.readValue(file.toFile(), Dataset.class));
         }
         return FileVisitResult.CONTINUE;
       }
     });
 
-    Path cacheDirPath = paths.getCacheDirPath();
+    if (service[0] == null) {
+      throw new Exception("service.yaml not found");
+    }
 
-    Files.walkFileTree(cacheDirPath, new SimpleFileVisitor<>() {
+    var config = new Config();
+    config.setService(service[0]);
+    config.setDatasets(datasets);
+
+    return config;
+  }
+
+  private void clean() throws IOException {
+    Files.walkFileTree(Path.of(outputDir), new SimpleFileVisitor<>() {
       @Override
-      public FileVisitResult postVisitDirectory(@NotNull Path dir, IOException exc) throws IOException {
-        // Attempt to delete the directory
-        if (!dir.equals(cacheDirPath)) {
-          FileUtils.deleteDirectory(dir.toFile());
-          System.out.println("Deleted directory: " + dir);
+      public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+        if (file.toString().endsWith(".xml")) {
+          Files.delete(file);
+          System.out.println("Deleted: " + file);
         }
         return FileVisitResult.CONTINUE;
       }

@@ -1,0 +1,11 @@
+id: odl_10m
+date: 2025-05-05
+files:
+  - typeTitle: GML
+    filename: http://localhost:8080/files/file3.gml
+    crs: EPSG:4326
+    mimeType: application/gml+xml;version=3.2
+  - typeTitle: GML
+    filename: http://localhost:8080/files/file4.gml
+    crs: EPSG:25832
+    mimeType: application/gml+xml;version=3.2

@@ -2,14 +2,8 @@ package de.terrestris.inspire.atom.config;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class Entry {
-
-  private List<File> files;
-
-  private WfsConfig wfsConfig;
 
   private String title;
 
@@ -19,4 +13,5 @@ public class Entry {
 
   private String metadata;
 
+  private String basePath;
 }
