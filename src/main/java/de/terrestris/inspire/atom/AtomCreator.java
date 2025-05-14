@@ -132,33 +132,17 @@ public class AtomCreator implements Callable<Boolean> {
         }
         return FileVisitResult.CONTINUE;
       }
-
-      @Override
-      public FileVisitResult visitFileFailed(Path file, IOException exc) {
-        // Log the error or handle it as needed
-        return FileVisitResult.CONTINUE;
-      }
     });
 
     Path cacheDirPath = paths.getCacheDirPath();
 
     Files.walkFileTree(cacheDirPath, new SimpleFileVisitor<>() {
       @Override
-      public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-        // Skip files; only process directories
-        return FileVisitResult.CONTINUE;
-      }
-
-      @Override
-      public FileVisitResult postVisitDirectory(@NotNull Path dir, IOException exc) {
+      public FileVisitResult postVisitDirectory(@NotNull Path dir, IOException exc) throws IOException {
         // Attempt to delete the directory
         if (!dir.equals(cacheDirPath)) {
-          try {
-            FileUtils.deleteDirectory(dir.toFile());
-            System.out.println("Deleted directory: " + dir);
-          } catch (IOException e) {
-            System.err.println("Failed to delete directory: " + dir);
-          }
+          FileUtils.deleteDirectory(dir.toFile());
+          System.out.println("Deleted directory: " + dir);
         }
         return FileVisitResult.CONTINUE;
       }
