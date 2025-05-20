@@ -1,3 +1,8 @@
+Atom-Creator
+============
+
+A simple tool to generate INSPIRE atom feeds. The initial development was funded by the BfS (Bundesamt für Strahlenschutz).
+
 Running Application
 -------------------
 
