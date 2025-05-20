@@ -7,22 +7,8 @@ import java.util.List;
 @Data
 public class Config {
 
-  private List<Entry> entries;
+  private Service service;
 
-  private String id;
-
-  private String title;
-
-  private String author;
-
-  private String email;
-
-  private String license;
-
-  private String identifierNamespace;
-
-  private BoundingBox bbox;
-
-  private String metadata;
+  private List<Dataset> datasets;
 
 }
