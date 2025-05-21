@@ -12,15 +12,14 @@
         "mavenTarget": "deploy",
         "clean": false,
         "updateSnapshotVersion": true,
-        "settingsPath": "/home/runner/.m2/settings.xml",
-        "processAllModules": true
+        "settingsPath": "/home/runner/.m2/settings.xml"
       }
     ],
     [
       "@semantic-release/git",
       {
         "assets": [
-          "CHANGELOG.md", "pom.xml", "**/pom.xml"
+          "CHANGELOG.md", "pom.xml"
         ],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
