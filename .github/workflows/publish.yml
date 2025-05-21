@@ -36,7 +36,7 @@ jobs:
             [
               { "id": "nexus.terrestris.de-releases", "username": "${{ secrets.NEXUS_USER }}", "password": "${{ secrets.NEXUS_PASSWORD }}" },
               { "id": "nexus.terrestris.de-snapshots", "username": "${{ secrets.NEXUS_USER }}", "password": "${{ secrets.NEXUS_PASSWORD }}" },
-              { "id": "ghcr.io", "username": "${{ github.actor }}", "password": "${{ secrets.GITHUB_TOKEN }}" },
+              { "id": "ghcr.io", "username": "${{ github.actor }}", "password": "${{ secrets.GITHUB_TOKEN }}" }
             ]
 
       - name: Install dependencies
