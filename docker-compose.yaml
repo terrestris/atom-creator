@@ -8,11 +8,8 @@ services:
 
   atom-creator:
     container_name: atom-creator
-    build:
-      context: .
-    image: atom-creator
-    environment:
-      PUBLIC_URL: http://localhost:8080
+    image: ghcr.io/terrestris/atom-creator:latest
+    command: /configs /feeds
     volumes:
       - ./docker/configs:/configs
       - ./docker/feeds:/feeds
