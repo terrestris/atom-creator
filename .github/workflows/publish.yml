@@ -10,7 +10,7 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v4
         with:
-          # Disabling shallow clone is needed for correctly determing next release with semantic release
+          # Disabling shallow clone is needed for correctly determining the next release with semantic release
           fetch-depth: 0
           persist-credentials: false
 
@@ -35,7 +35,8 @@ jobs:
           servers: |
             [
               { "id": "nexus.terrestris.de-releases", "username": "${{ secrets.NEXUS_USER }}", "password": "${{ secrets.NEXUS_PASSWORD }}" },
-              { "id": "nexus.terrestris.de-snapshots", "username": "${{ secrets.NEXUS_USER }}", "password": "${{ secrets.NEXUS_PASSWORD }}" }
+              { "id": "nexus.terrestris.de-snapshots", "username": "${{ secrets.NEXUS_USER }}", "password": "${{ secrets.NEXUS_PASSWORD }}" },
+              { "id": "ghcr.io", "username": "${{ github.actor }}", "password": "${{ secrets.GITHUB_TOKEN }}" },
             ]
 
       - name: Install dependencies
