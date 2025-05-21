@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/terrestris/atom-creator/compare/v1.0.0...v1.0.1) (2025-05-21)
+
+
+### Bug Fixes
+
+* use correct release management ([b9a2a15](https://github.com/terrestris/atom-creator/commit/b9a2a156651f1569c6acd73595476ebcaf1755a8))
+* use correct release management ([522090e](https://github.com/terrestris/atom-creator/commit/522090ee302af39b423b18d852a6fcd725fbcd16))
+
 # 1.0.0 (2025-05-20)
 
 
